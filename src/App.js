@@ -1,25 +1,43 @@
-import logo from './logo.svg';
-import './App.css';
+import './App.css'
+import axios from 'axios'
+import {useEffect, useState} from 'react'
+import Grid from '@material-ui/core/Grid'
+import LeftPanel from './components/LeftPanel'
+import RightPanel from './components/RightPanel'
 
-function App() {
+const App = () => {
+  const [scenarios, setScenarios] = useState()
+  const [selectedScenarios, setSelectedScenarios] = useState([])
+
+  useEffect(() => {
+    console.log({scenarios})
+  }, [scenarios])
+
+  useEffect(() => {
+    axios
+      .get('https://my-json-server.typicode.com/fiveai-fe/api/scenarios')
+      .then((resp) => {
+        localStorage.setItem('five-ai-scenarios', resp.data)
+        setScenarios(resp.data)
+      })
+  }, [])
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className='layout-width-constraint mv0 pv0'>
+      <div className='w-100 bb b--black mb3'>
+        <h2 className='mb2' >Scenario Saver</h2>
+      </div>
+      <Grid container spacing={4}>
+        <Grid item xs={6}>
+          <LeftPanel {...{ scenarios }} />
+        </Grid>
+        <Grid item xs={6}>
+          <RightPanel />
+        </Grid>
+      </Grid>
     </div>
-  );
+  )
 }
 
-export default App;
+
+export default App
