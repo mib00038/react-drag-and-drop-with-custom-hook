@@ -1,0 +1,1 @@
+export const SCENARIOS_URL = 'https://my-json-server.typicode.com/fiveai-fe/api/scenarios'
