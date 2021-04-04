@@ -1,30 +1,54 @@
-import SearchBox from './SearchBox'
-import moment from 'moment'
+import React from 'react'
 import Grid from '@material-ui/core/Grid'
-
-const getScenarioDateString = ( scenarioDate ) => {
-  const date = scenarioDate.toUpperCase()
-  return moment(date).format("DD-MMM-YY").toString()
-}
+import SearchBox from './SearchBox'
+import { Draggable, Droppable } from 'react-beautiful-dnd'
+import Card from '@material-ui/core/Card'
+import {getItemStyle, getListStyle, getScenarioDateString} from '../App'
+import Scenario from './Scenario'
 
 const LeftPanel = ({ scenarios }) => (
   <div>
     <SearchBox />
-    <div className='vh-75 ba overflow-scroll'>
-      {scenarios && scenarios.map(({ id, imageurl, name, date, creator }) => (
-        <div key={id} className='pa2 bb flex justify-between'>
-          <img src={ imageurl } height={ 60 } alt='scenario photograph'/>
-          <div className='flex flex-column justify-between w-100 pl2'>
-            <Grid container className='w-100 pb3'>
-              <Grid item xs={ 8 } >{ name }</Grid>
-              <Grid item xs={ 4 } className='tr'>{ getScenarioDateString(date) }</Grid>
-            </Grid>
-            <div>{ creator }</div>
-          </div>
+    <Droppable droppableId="left-panel">
+      {( provided, snapshot ) => (
+        <div
+          ref={ provided.innerRef }
+          className='vh-75 ba overflow-scroll'
+          style={ getListStyle(snapshot.isDragging) }
+        >
+          {scenarios && scenarios.map( ({ id, imageurl, name, date, creator }, index) => (
+            <Draggable
+              key={ id }
+              draggableId={ id }
+              index={ index }
+            >
+              {( provided, snapshot ) => {
+                const { innerRef, draggableProps, dragHandleProps } = provided
+
+                const itemStyle = getItemStyle(snapshot.isDragging, draggableProps.style)
+
+
+                return (
+                  <Card
+                    raised
+                    square={true}
+                    ref={innerRef}
+                    {...{ ...draggableProps, ...dragHandleProps }}
+                    style={ itemStyle }
+                    className='pa2 flex justify-between'
+                  >
+                    <Scenario {...{imageurl, name, date, creator}} />
+                  </Card>
+                )
+              }}
+            </Draggable>
+          ))}
+          { provided.placeholder }
         </div>
-      ))}
-    </div>
+      )}
+    </Droppable>
   </div>
 )
+
 
 export default LeftPanel
