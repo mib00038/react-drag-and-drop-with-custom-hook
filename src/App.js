@@ -7,7 +7,7 @@ import useScenarioSaver from './hooks/useScenariosSaver'
 
 const App = () => {
   const { onDragEnd, scenarios, savedScenarios } = useScenarioSaver()
-
+  
   return (
     <div className='layout-width-constraint mv0 pv0'>
       <div className='w-100 bb b--black mb3'>

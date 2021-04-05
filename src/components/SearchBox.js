@@ -1,6 +1,7 @@
 import TextField from '@material-ui/core/TextField'
 
-const SearchBox = () => {
+const SearchBox = ({ setSearchText }) => {
+  
   return (
     <div className='pv3'>
       <form>
@@ -8,6 +9,10 @@ const SearchBox = () => {
           label='Search scenarios'
           variant='outlined'
           type='search'
+          onChange={(e) => {
+            console.log(e.target.value)
+            setSearchText(e.target.value)
+          }}
         />
       </form>
     </div>
