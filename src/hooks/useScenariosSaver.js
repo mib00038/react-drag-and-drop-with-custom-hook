@@ -2,15 +2,16 @@ import produce from 'immer'
 import { useEffect, useState } from 'react'
 import axios from 'axios'
 import { SCENARIOS_URL } from '../constants/urls'
+import isEmpty from 'lodash.isempty'
 
-const reorder = (list, startIndex, endIndex) => (
+const reorder = ( list, startIndex, endIndex ) => (
   produce(list, draft => {
     const [removed] = draft.splice(startIndex, 1)
     draft.splice(endIndex, 0, removed)
   })
 )
 
-const move = (source, destination, droppableSource, droppableDestination) => (
+const move = ( source, destination, droppableSource, droppableDestination ) => (
   produce({}, draft => {
     draft[droppableSource.droppableId] = produce(source, sourceDraft => {
       sourceDraft.splice(droppableSource.index, 1)
@@ -26,13 +27,29 @@ const useScenarioSaver = () => {
   const [savedScenarios, setSavedScenarios] = useState([])
 
   useEffect(() => {
-    axios
-      .get(SCENARIOS_URL)
-      .then((resp) => {
-        localStorage.setItem('scenarios', resp.data)
-        setScenarios(resp.data)
-      })
+    const _savedScenarios = JSON.parse(localStorage.getItem('savedScenarios'))
+    const _scenarios = JSON.parse(localStorage.getItem('scenarios'))
+
+    if (isEmpty(_savedScenarios) && isEmpty(_scenarios)) {
+      axios
+        .get(SCENARIOS_URL)
+        .then((resp) => {
+          setScenarios(resp.data)
+        })
+
+    } else {
+      setSavedScenarios(_savedScenarios)
+      setScenarios(_scenarios)
+    }
   }, [])
+
+  useEffect(() => {
+    localStorage.setItem('scenarios', JSON.stringify(scenarios))
+  }, [scenarios])
+
+  useEffect(() => {
+    localStorage.setItem('savedScenarios', JSON.stringify(savedScenarios))
+  }, [savedScenarios])
 
   const getList = id => id === 'leftPanel' ? scenarios: savedScenarios
 
@@ -49,6 +66,7 @@ const useScenarioSaver = () => {
       setSavedScenarios( rightPanel )
     } else {
       const items = reorder(sourceList, source.index, destination.index)
+
       source.droppableId === 'rightPanel' ? setSavedScenarios( items ) : setScenarios( items )
     }
   }
