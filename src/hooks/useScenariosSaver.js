@@ -71,7 +71,7 @@ const useScenarioSaver = () => {
     }
   }
 
-  return { onDragEnd, scenarios, savedScenarios }
+  return { onDragEnd, scenarios, savedScenarios, setScenarios }
 }
 
 export default useScenarioSaver

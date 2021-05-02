@@ -6,7 +6,7 @@ import { DragDropContext } from 'react-beautiful-dnd'
 import useScenarioSaver from './hooks/useScenariosSaver'
 
 const App = () => {
-  const { onDragEnd, scenarios, savedScenarios } = useScenarioSaver()
+  const { onDragEnd, scenarios, savedScenarios, setScenarios } = useScenarioSaver()
   
   return (
     <div className='layout-width-constraint mv0 pv0'>
@@ -16,7 +16,7 @@ const App = () => {
       <DragDropContext {...{ onDragEnd }}>
         <Grid container spacing={4}>
           <Grid item xs={6}>
-            <LeftPanel {...{ scenarios }} />
+            <LeftPanel {...{ scenarios, setScenarios }} />
           </Grid>
           <Grid item xs={6}>
             <RightPanel {...{ savedScenarios }} />
