@@ -4,8 +4,8 @@ A React app that allows users to save a collection of street locations to HTML 5
 
 The page is made up of two columns. The first column is populated with a list of street locations retrieved from an API
 and the second is a list of street locations the user has ‘saved’ by
-dragging and dropping between the columns. The user is able to
-filter the locations shown in the first column by name via a search bar.
+dragging and dropping between the columns. The user is able to filter the locations shown in the first column by name via a search bar.
+The user is also able to reorder the locations by date (ascending/descending) via a switch control.
 
 # Getting Started with Create React App
 
